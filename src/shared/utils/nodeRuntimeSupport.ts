@@ -72,14 +72,20 @@ export function getSecureFloorForMajor(major: number): NodeVersionInfo | null {
 
 export function getNodeRuntimeSupport(version: string = process.versions.node): NodeRuntimeSupport {
   if (process.versions.bun) {
+    const bunCompatible =
+      compareNodeVersions(parseNodeVersion(process.versions.bun), {
+        major: 1,
+        minor: 4,
+        patch: 4,
+      }) >= 0;
     return {
       nodeVersion: `bun-${process.versions.bun} (Node.js API ${version})`,
-      nodeCompatible: true,
-      reason: "supported-bun",
-      supportedRange: SUPPORTED_NODE_RANGE + " || Bun >=1.1.0",
-      supportedDisplay: SUPPORTED_NODE_DISPLAY + ", or Bun 1.1+",
+      nodeCompatible: bunCompatible,
+      reason: bunCompatible ? "supported-bun" : "below-security-floor",
+      supportedRange: SUPPORTED_NODE_RANGE + " || Bun >=1.4.4",
+      supportedDisplay: SUPPORTED_NODE_DISPLAY + ", or Bun 1.4.4+",
       recommendedVersion: `v${RECOMMENDED_NODE_VERSION}`,
-      minimumSecureVersion: null,
+      minimumSecureVersion: "Bun v1.4.4",
     };
   }
 
@@ -110,6 +116,10 @@ export function getNodeRuntimeSupport(version: string = process.versions.node): 
 export function getNodeRuntimeWarning(version: string = process.versions.node): string | null {
   const support = getNodeRuntimeSupport(version);
   if (support.nodeCompatible) return null;
+  if (process.versions.bun)
+    return `Bun ${process.versions.bun} is below the patched minimum v1.4.4.`;
+  if (process.versions.bun)
+    return `Bun ${process.versions.bun} is below the patched minimum v1.4.4.`;
 
   if (support.reason === "below-security-floor" && support.minimumSecureVersion) {
     return `Node.js ${support.nodeVersion} is below the patched minimum ${support.minimumSecureVersion} for this LTS line.`;
