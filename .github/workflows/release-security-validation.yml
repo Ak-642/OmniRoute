@@ -39,6 +39,12 @@ jobs:
       - name: Run Vitest suite
         if: matrix.check == 'vitest'
         run: npm run test:vitest
+      - name: Check patched security tooling
+        if: matrix.check == 'vitest'
+        run: npx --no-install promptfoo --version
+        env:
+          PROMPTFOO_DISABLE_TELEMETRY: "1"
+          PROMPTFOO_CONFIG_DIR: ${{ runner.temp }}/promptfoo
       - name: Build production application
         if: matrix.check == 'build'
         run: npm run build
