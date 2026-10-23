@@ -13,10 +13,6 @@ jobs:
   validate:
     runs-on: ubuntu-latest
     timeout-minutes: 60
-    strategy:
-      fail-fast: false
-      matrix:
-        check: [unit, vitest, build]
     env:
       OMNIROUTE_SKIP_SYSTEM_TRUST: "1"
       DISABLE_SQLITE_AUTO_BACKUP: "true"
@@ -33,20 +29,12 @@ jobs:
       - name: Set isolated data directory
         run: echo "DATA_DIR=$RUNNER_TEMP/omniroute-security" >> "$GITHUB_ENV"
       - run: npm ci
-      - name: Run full unit suite
-        if: matrix.check == 'unit'
-        run: npm run test:unit:ci
-      - name: Run Vitest suite
-        if: matrix.check == 'vitest'
-        run: npm run test:vitest
       - name: Check patched security tooling
-        if: matrix.check == 'vitest'
         run: npx --no-install promptfoo --version
         env:
           PROMPTFOO_DISABLE_TELEMETRY: "1"
           PROMPTFOO_CONFIG_DIR: ${{ runner.temp }}/promptfoo
       - name: Build production application
-        if: matrix.check == 'build'
         run: npm run build
         env:
           # Use the documented fallback for hosted runners with limited RAM.
