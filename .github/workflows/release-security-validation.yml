@@ -20,7 +20,6 @@ jobs:
     env:
       OMNIROUTE_SKIP_SYSTEM_TRUST: "1"
       DISABLE_SQLITE_AUTO_BACKUP: "true"
-      DATA_DIR: ${{ runner.temp }}/omniroute-security
       OMNIROUTE_BUILD_MEMORY_MB: "4096"
       OMNIROUTE_BUILD_WORKERS: "1"
     steps:
@@ -31,6 +30,8 @@ jobs:
         with:
           node-version: "24.22.1"
           package-manager-cache: false
+      - name: Set isolated data directory
+        run: echo "DATA_DIR=$RUNNER_TEMP/omniroute-security" >> "$GITHUB_ENV"
       - run: npm ci
       - name: Run full unit suite
         if: matrix.check == 'unit'
