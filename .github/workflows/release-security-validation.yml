@@ -42,3 +42,7 @@ jobs:
       - name: Build production application
         if: matrix.check == 'build'
         run: npm run build
+        env:
+          # Use the documented fallback for hosted runners with limited RAM.
+          OMNIROUTE_USE_TURBOPACK: "0"
+          OMNIROUTE_BUILD_MEMORY_MB: "6144"

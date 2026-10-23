@@ -68,7 +68,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: "26"
+          node-version: "26.12.1"
           cache: npm
       - uses: ./.github/actions/npm-ci-retry
       # #8090 — this is the ONLY Node 26 build in the whole CI matrix (ci.yml pins
@@ -94,7 +94,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        node: [24, 26]
+        node: ["24.22.1", "26.12.1"]
         shard: [1, 2, 3, 4]
     env:
       JWT_SECRET: ci-nightly-secret-with-sufficient-length-for-validation
