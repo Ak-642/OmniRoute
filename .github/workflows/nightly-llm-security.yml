@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: false
       - uses: actions/setup-node@v7
-        with: { node-version: "24", cache: npm }
+        with: { node-version: "24.22.1", cache: npm }
       - run: npm ci
       - name: Build CLI bundle
         env:
@@ -75,7 +75,7 @@ jobs:
         if: steps.gate.outputs.run == 'true'
       - uses: actions/setup-node@v7
         if: steps.gate.outputs.run == 'true'
-        with: { node-version: "24", cache: npm }
+        with: { node-version: "24.22.1", cache: npm }
       - run: npm ci
         if: steps.gate.outputs.run == 'true'
       - name: Build CLI bundle

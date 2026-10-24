@@ -109,7 +109,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "24.22.1"
           cache: npm
       - run: npm ci
       - name: Restore Stryker incremental cache
@@ -153,7 +153,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: "24"
+          node-version: "24.22.1"
       - name: Download all mutation reports
         uses: actions/download-artifact@v8
         with:

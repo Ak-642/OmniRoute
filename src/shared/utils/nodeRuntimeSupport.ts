@@ -8,16 +8,15 @@
  */
 
 export const SECURE_NODE_LINES = Object.freeze([
-  Object.freeze({ major: 22, minor: 22, patch: 2 }),
-  Object.freeze({ major: 24, minor: 0, patch: 0 }),
-  Object.freeze({ major: 25, minor: 0, patch: 0 }),
-  Object.freeze({ major: 26, minor: 0, patch: 0 }),
+  Object.freeze({ major: 22, minor: 23, patch: 4 }),
+  Object.freeze({ major: 24, minor: 22, patch: 1 }),
+  Object.freeze({ major: 26, minor: 12, patch: 1 }),
 ]);
 
-export const RECOMMENDED_NODE_VERSION = "24.14.1";
-export const SUPPORTED_NODE_RANGE = ">=22.22.2 <23 || >=24.0.0 <27";
+export const RECOMMENDED_NODE_VERSION = "24.22.1";
+export const SUPPORTED_NODE_RANGE = ">=22.23.4 <23 || >=24.22.1 <25 || >=26.12.1 <27";
 export const SUPPORTED_NODE_DISPLAY =
-  "Node.js 22.22.2+ (22.x LTS), 24.0.0+ (24.x LTS), 25.0.0+ (25.x), or 26.0.0+ (26.x)";
+  "Node.js 22.23.4+ (22.x LTS), 24.22.1+ (24.x LTS), or 26.12.1+ (26.x)";
 
 export interface NodeVersionInfo {
   major: number;
@@ -73,14 +72,20 @@ export function getSecureFloorForMajor(major: number): NodeVersionInfo | null {
 
 export function getNodeRuntimeSupport(version: string = process.versions.node): NodeRuntimeSupport {
   if (process.versions.bun) {
+    const bunCompatible =
+      compareNodeVersions(parseNodeVersion(process.versions.bun), {
+        major: 1,
+        minor: 4,
+        patch: 4,
+      }) >= 0;
     return {
       nodeVersion: `bun-${process.versions.bun} (Node.js API ${version})`,
-      nodeCompatible: true,
-      reason: "supported-bun",
-      supportedRange: SUPPORTED_NODE_RANGE + " || Bun >=1.1.0",
-      supportedDisplay: SUPPORTED_NODE_DISPLAY + ", or Bun 1.1+",
+      nodeCompatible: bunCompatible,
+      reason: bunCompatible ? "supported-bun" : "below-security-floor",
+      supportedRange: SUPPORTED_NODE_RANGE + " || Bun >=1.4.4",
+      supportedDisplay: SUPPORTED_NODE_DISPLAY + ", or Bun 1.4.4+",
       recommendedVersion: `v${RECOMMENDED_NODE_VERSION}`,
-      minimumSecureVersion: null,
+      minimumSecureVersion: "Bun v1.4.4",
     };
   }
 
@@ -111,13 +116,15 @@ export function getNodeRuntimeSupport(version: string = process.versions.node): 
 export function getNodeRuntimeWarning(version: string = process.versions.node): string | null {
   const support = getNodeRuntimeSupport(version);
   if (support.nodeCompatible) return null;
+  if (process.versions.bun)
+    return `Bun ${process.versions.bun} is below the patched minimum v1.4.4.`;
 
   if (support.reason === "below-security-floor" && support.minimumSecureVersion) {
     return `Node.js ${support.nodeVersion} is below the patched minimum ${support.minimumSecureVersion} for this LTS line.`;
   }
 
   if (support.reason === "unreleased-major") {
-    return `Node.js ${support.nodeVersion} is outside the supported LTS lines. OmniRoute currently supports Node.js 22.x, 24.x, 25.x, and 26.x.`;
+    return `Node.js ${support.nodeVersion} is outside the supported LTS lines. OmniRoute currently supports Node.js 22.x, 24.x, and 26.x.`;
   }
 
   return `Node.js ${support.nodeVersion} is outside OmniRoute's approved secure runtime policy.`;

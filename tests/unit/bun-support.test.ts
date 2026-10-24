@@ -6,12 +6,12 @@ import { createSyncDriverFactory } from "../../src/lib/db/adapters/driverFactory
 test("getNodeRuntimeSupport detects Bun as a supported runtime", () => {
   const originalBun = process.versions.bun;
   try {
-    (process.versions as Record<string, string>).bun = "1.1.20";
+    (process.versions as Record<string, string>).bun = "1.4.4";
     const support = getNodeRuntimeSupport("22.0.0");
     assert.equal(support.nodeCompatible, true);
     assert.equal(support.reason, "supported-bun");
-    assert.match(support.nodeVersion, /^bun-1\.1\.20/);
-    assert.match(support.supportedDisplay, /Bun 1\.1\+/);
+    assert.match(support.nodeVersion, /^bun-1\.4\.4/);
+    assert.match(support.supportedDisplay, /Bun 1\.4\.4\+/);
   } finally {
     if (originalBun === undefined) {
       delete (process.versions as Record<string, string | undefined>).bun;
