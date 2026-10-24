@@ -19,6 +19,12 @@ jobs:
       OMNIROUTE_BUILD_MEMORY_MB: "4096"
       OMNIROUTE_BUILD_WORKERS: "1"
     steps:
+      - name: Add build memory headroom
+        run: |
+          sudo fallocate -l 10G /mnt/omniroute-security-swap
+          sudo chmod 600 /mnt/omniroute-security-swap
+          sudo mkswap /mnt/omniroute-security-swap
+          sudo swapon /mnt/omniroute-security-swap
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
         with:
           persist-credentials: false
@@ -39,4 +45,5 @@ jobs:
         env:
           # Use the documented fallback for hosted runners with limited RAM.
           OMNIROUTE_USE_TURBOPACK: "0"
-          OMNIROUTE_BUILD_MEMORY_MB: "6144"
+          OMNIROUTE_BUILD_MEMORY_MB: "12288"
+          NODE_OPTIONS: "--max-old-space-size=12288"

@@ -440,6 +440,7 @@
     "unrs-resolver": true
   },
   "overrides": {
+    "eslint-plugin-react-hooks": "$eslint-plugin-react-hooks",
     "get-uri": {
       "basic-ftp": "^6.2.3"
     },
