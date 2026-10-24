@@ -3,7 +3,8 @@
   "_justifications": {
     "@testing-library/dom": "Peer dep obrigatoria de @testing-library/react v16 (adicionada no PR #11224); Refs #9985.",
     "@testing-library/user-event": "Utilitario oficial do ecossistema testing-library para testes de UI (adicionada no PR #11224); Refs #9985.",
-    "eslint-plugin-react-hooks": "React Hooks lint rules (set-state-in-effect, immutability, refs, purity) pinned at 7.0.1 by the release/v3.8.51 cycle; the 224 findings it raised are tracked in #11924. Refs #11924."
+    "eslint-plugin-react-hooks": "React Hooks lint rules (set-state-in-effect, immutability, refs, purity) pinned at 7.0.1 by the release/v3.8.51 cycle; the 224 findings it raised are tracked in #11924. Refs #11924.",
+    "playwright-core": "Official Microsoft Playwright runtime, pinned to the same 1.62.1 version already used by playwright. Declared directly for existing vendored browser adapter imports after dependency deduplication exposed the missing declaration; security PR #1."
   },
   "allowed": [
     "@atjsh/llmlingua-2",
@@ -113,6 +114,7 @@
     "pino-abstract-transport",
     "pino-pretty",
     "playwright",
+    "playwright-core",
     "playwright-ctrf-json-reporter",
     "prettier",
     "promptfoo",
