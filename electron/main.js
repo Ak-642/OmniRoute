@@ -17,6 +17,9 @@
  * #15 Content Security Policy via session headers
  */
 
+const { assertSafeEmbeddedRuntime } = require("./lib/runtimeSecurity");
+assertSafeEmbeddedRuntime(process.versions);
+
 const {
   app,
   BrowserWindow,

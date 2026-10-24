@@ -508,6 +508,9 @@
     },
     "@azure/identity": {
       "@azure/msal-node": "^7.1.1"
+    },
+    "mermaid": {
+      "katex": "^0.18.2"
     }
   }
 }
