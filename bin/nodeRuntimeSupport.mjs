@@ -90,8 +90,6 @@ export function getNodeRuntimeWarning(version = process.versions.node) {
   if (support.nodeCompatible) return null;
   if (process.versions.bun)
     return `Bun ${process.versions.bun} is below the patched minimum v1.4.4.`;
-  if (process.versions.bun)
-    return `Bun ${process.versions.bun} is below the patched minimum v1.4.4.`;
 
   if (support.reason === "below-security-floor" && support.minimumSecureVersion) {
     return `Node.js ${support.nodeVersion} is below the patched minimum ${support.minimumSecureVersion} for this LTS line.`;
