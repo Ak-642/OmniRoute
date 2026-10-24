@@ -10,12 +10,12 @@
   "license": "MIT",
   "homepage": "https://omniroute.online",
   "engines": {
-    "node": ">=22.22.2 <23 || >=24.0.0 <27"
+    "node": ">=22.23.4 <23 || >=24.22.1 <25 || >=26.12.1 <27"
   },
   "scripts": {
     "start": "electron .",
-    "dev": "electron . --no-sandbox",
-    "prepare:bundle": "node ../scripts/build/prepare-electron-standalone.mjs",
+    "dev": "electron .",
+    "prepare:bundle": "node ../scripts/check/check-electron-runtime.mjs && node ../scripts/build/prepare-electron-standalone.mjs",
     "build": "npm run prepare:bundle && electron-builder",
     "build:win": "npm run prepare:bundle && electron-builder --win",
     "build:mac": "npm run prepare:bundle && electron-builder --mac",
@@ -28,7 +28,7 @@
     "electron-updater": "^6.8.9"
   },
   "devDependencies": {
-    "electron": "^43.4.1",
+    "electron": "43.8.3",
     "electron-builder": "^26.15.3"
   },
   "overrides": {
@@ -74,7 +74,8 @@
       "lib/windowClosePolicy.js",
       "assets/remoteServerPrompt.html",
       "package.json",
-      "node_modules/**/*"
+      "node_modules/**/*",
+      "lib/runtimeSecurity.js"
     ],
     "extraResources": [
       {
