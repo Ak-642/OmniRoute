@@ -33,3 +33,18 @@ test("packaging includes the guard and checks the actual Electron binary", () =>
   assert.match(pkg.scripts["prepare:bundle"], /check-electron-runtime/);
   assert.doesNotMatch(pkg.scripts.dev, /--no-sandbox/);
 });
+
+test("desktop pins a verified patched Electron 43 release", () => {
+  const pkg = JSON.parse(readFileSync(new URL("electron/package.json", root), "utf8"));
+  assert.equal(pkg.devDependencies.electron, "43.8.4");
+});
+
+test("MCP HTTP adapter resolves a patched Hono static-file adapter", () => {
+  const lock = JSON.parse(readFileSync(new URL("package-lock.json", root), "utf8"));
+  const adapters = Object.entries(lock.packages).filter(([name]) => name.endsWith("node_modules/@hono/node-server"));
+  assert.ok(adapters.length);
+  for (const [name, pkg] of adapters) {
+    const [major, minor, patch] = pkg.version.split(".").map(Number);
+    assert.ok(major > 2 || (major === 2 && (minor > 1 || (minor === 1 && patch >= 3))), `${name}: ${pkg.version}`);
+  }
+});
